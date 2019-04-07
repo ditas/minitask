@@ -1,0 +1,94 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+
+"test6application": {
+  "Type": "AWS::CodeDeploy::Application",
+  "Properties": {
+    "ComputePlatform": "Server"
+  }
+},
+
+"test6largedata": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "VersioningConfiguration": {
+          "Status": "Suspended"
+        }
+      }
+    },
+
+    "test6encrypted": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "k",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "k",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": "5",
+          "WriteCapacityUnits": "5"
+        }
+      }
+    },
+
+    "test6ddbs3user" : {
+	  "Type": "AWS::IAM::User",
+	  "Properties": {
+	  	"Path" : "/",
+      	"LoginProfile" : {
+			     "Password" : "165083"
+      	},
+	   "Policies" : [ 
+	   	{
+         "PolicyName" : "test6ddbpolicy",
+         "PolicyDocument" : {
+		    "Version": "2012-10-17",
+		    "Statement": [
+		        {
+		            "Effect": "Allow",
+		            "Action": [
+		                "dynamodb:BatchGetItem",
+		                "dynamodb:BatchWriteItem",
+		                "dynamodb:DeleteItem",
+		                "dynamodb:GetItem",
+		                "dynamodb:PutItem",
+		                "dynamodb:Query",
+		                "dynamodb:UpdateItem"
+		            ],
+		            "Resource": [{
+		                "Fn::GetAtt" : [ "test5encrypted", "Arn" ]
+		            }]
+		        }
+		    ]
+		}
+      }, 
+      {
+         "PolicyName" : "test6s3policy",
+         "PolicyDocument" : {
+		    "Version": "2012-10-17",
+		    "Statement": [
+		        {
+		            "Sid": "VisualEditor0",
+		            "Effect": "Allow",
+		            "Action": "s3:*",
+		            "Resource": [
+		                "arn:aws:s3:::test6largedata"
+		            ]
+		        }
+		    ]
+		}
+      } ]
+  }
+	}
+	}
+}

@@ -1,0 +1,22 @@
+{application, minitask,
+    [{description, "Miniclip test app"},
+        {vsn, "0.1.0"},
+        {registered, []},
+        {mod, {minitask_app, []}},
+        {applications,
+            [
+                kernel,
+                stdlib,
+                lager,
+                ssl,
+                erlcloud,
+                ranch,
+                crypto
+            ]},
+        {env, []},
+        {modules, []},
+        
+        {maintainers, []},
+        {licenses, ["Apache 2.0"]},
+        {links, []}
+    ]}.

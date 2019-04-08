@@ -48,8 +48,10 @@ stop(_State) ->
 %% Internal functions
 %%====================================================================
 initialize(Conf) ->
-    {ok, [{_, CMK}]} = erlcloud_kms:create_key([], Conf),
-    {_, KeyId} = lists:keyfind(<<"KeyId">>, 1, CMK),
+%%    {ok, [{_, CMK}]} = erlcloud_kms:create_key([], Conf),
+%%    {_, KeyId} = lists:keyfind(<<"KeyId">>, 1, CMK),
+
+    {ok, KeyId} = application:get_env(minitask, key_id),
 
     {ok, DataKey} = erlcloud_kms:generate_data_key(KeyId,[{key_spec, 'AES_128'}],Conf),
     
